@@ -1,0 +1,31 @@
+.actorsList {
+  list-style: none;
+  margin-top: 15px;
+
+  display: grid;
+  max-width: calc(100vw - 48px);
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  grid-gap: 16px;
+  margin-bottom: 10px;
+  padding: 0;
+  list-style: none;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.castItem {
+  box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;
+  text-align: center;
+}
+
+.actorsName {
+  text-align: center;
+}
+
+p:last-child {
+  margin-bottom: 5px;
+}
+
+.actorsImg {
+  object-fit: cover;
+}
