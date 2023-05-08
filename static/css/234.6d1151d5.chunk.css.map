@@ -1,0 +1,1 @@
+{"version":3,"file":"static/css/234.6d1151d5.chunk.css","mappings":"AAAA,2BACE,eAAgB,CAChB,eACF,CAEA,wBACE,iBACF","sources":["components/Reviews/Reviews.module.css"],"sourcesContent":[".reviewList {\n  list-style: none;\n  margin-top: 15px;\n}\n\n.message {\n  text-align: center;\n}\n"],"names":[],"sourceRoot":""}
