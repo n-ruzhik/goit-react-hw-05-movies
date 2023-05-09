@@ -1,119 +1,43 @@
 import { useEffect, useState } from 'react';
-import { Link, useSearchParams, useLocation } from 'react-router-dom';
+import { useSearchParams, useLocation } from 'react-router-dom';
 import { fetchMoviesByQuery } from '../../components/utils/apiMovies';
-import css from './Movies.module.css';
 import Notiflix from 'notiflix';
+import Searchbar from 'components/Searchbar';
+import MovieGallery from 'components/MovieGallery';
 
 export default function Movies() {
-  const [searchQuery, setSearchQuery] = useState('');
-  const [findedMovies, setFindedMovies] = useState([]);
+  const [movies, setMovies] = useState([]);
   const [searchParams, setSearchParams] = useSearchParams();
-  const searchQueryFromParams = searchParams.get('query');
+  const searchQuery = searchParams.get('query');
   const location = useLocation();
 
   useEffect(() => {
-    if (searchQueryFromParams === null) {
+    if (!searchQuery) {
       return;
     }
-
-    try {
-      const getFindedMovies = async () => {
-        const {
-          data: { results },
-        } = await fetchMoviesByQuery(searchQueryFromParams);
-
+    fetchMoviesByQuery(searchQuery)
+      .then(results => {
         if (!results.length) {
           Notiflix.Notify.warning('Nothing found for your request, try again');
+          return;
         }
 
-        const findedData = results.map(
-          ({ id, poster_path, original_title }) => ({
-            id,
-            poster_path,
-            original_title,
-          })
-        );
+        setMovies(results);
+      })
+      .catch(error => {
+        console.log(error);
+      });
+  }, [searchQuery]);
 
-        setFindedMovies(findedData);
-      };
-
-      getFindedMovies();
-    } catch (error) {
-      console.log(error.message);
-    }
-  }, [searchQueryFromParams, searchParams]);
-
-  const onChange = ({ target }) => {
-    setSearchQuery(target.value);
-  };
-
-  const handleSubmit = event => {
-    event.preventDefault();
-    let { value } = event.target.elements.search;
-
-    setSearchQuery(value.toLowerCase().trim());
-    setSearchParams({ query: value.toLowerCase().trim() });
-
-    if (searchQuery.trim() === '') {
-      Notiflix.Notify.warning('Write movie title for searching');
-      value = '';
-      return;
-    }
-
-    setSearchQuery('');
+  const handleFormSubmit = query => {
+    setSearchParams({ query: query.trim() });
+    setMovies([]);
   };
 
   return (
-    <>
-      <div>
-        <form onSubmit={handleSubmit} className={css.searchForm}>
-          <input
-            type="text"
-            autoComplete="off"
-            name="search"
-            autoFocus
-            placeholder="search movie"
-            value={searchQuery}
-            onChange={onChange}
-            className={css.searchInput}
-          />
-          <button type="submit" className={css.button}>
-            Search
-          </button>
-        </form>
-      </div>
-
-      {findedMovies && (
-        <ul className={css.trendingGallery}>
-          {findedMovies.map(({ id, poster_path, original_title }) => {
-            return (
-              <li className={css.findedItem} key={id}>
-                <Link
-                  to={`/movies/${id}`}
-                  state={{ from: location }}
-                  key={id}
-                  className={css.findedItemLink}
-                >
-                  <div className={css.imgThumb}>
-                    <img
-                      className={css.imgPoster}
-                      src={
-                        poster_path
-                          ? `https://image.tmdb.org/t/p/w500/${poster_path}`
-                          : `https://brinkys.gr/media/products//Image-Not-Available.png`
-                      }
-                      alt={original_title}
-                      width="100%"
-                      height="100%"
-                    />
-                  </div>
-                  <h2 className={css.titleMovie}>{original_title}</h2>
-                </Link>
-              </li>
-            );
-          })}
-        </ul>
-      )}
-    </>
+    <div>
+      <Searchbar onSubmit={handleFormSubmit} />
+      {movies && <MovieGallery movies={movies} link={''} location={location} />}
+    </div>
   );
 }

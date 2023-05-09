@@ -32,13 +32,13 @@ export default function Reviews() {
   }, [reviews, movieId]);
 
   return (
-    <ul classsName={css.reviewList}>
+    <ul className={css.reviewList}>
       {reviews.length === 0 ? (
         <p className={css.message}>Sorry, there are no reviews yet</p>
       ) : (
         reviews.map(({ id, content }) => {
           return (
-            <li classsName={css.reviewItem} key={id}>
+            <li className={css.reviewItem} key={id}>
               <p>{content}</p>
             </li>
           );

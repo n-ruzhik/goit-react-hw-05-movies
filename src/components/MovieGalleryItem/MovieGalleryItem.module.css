@@ -1,0 +1,19 @@
+.findedItem {
+  box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+}
+
+.findedItemLink {
+  text-decoration: none;
+}
+
+.titleMovie {
+  text-align: center;
+  padding-left: 7px;
+  padding-right: 7px;
+  color: #3b0303;
+}
+
+.imgPoster {
+  width: 100%;
+  height: 100%;
+}
